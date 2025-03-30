@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Level-3</title>
+    <style>
+        body {
+            text-align: center;
+            font-family: Arial, sans-serif;
+            background: url('bg8.jpeg');
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-size: 100% 100%;
+        }
+        canvas {
+            border: 2px solid black;
+            background: linear-gradient(to bottom, #000000, #ffffff);
+        }
+        h1{
+            color:white;
+        }
+        #score {
+            font-size: 20px;
+            margin-top: 10px;
+            color: white;
+        }
+        .menu-button {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            padding: 10px 15px;
+            font-size: 16px;
+            background-color: #ffcc00;
+            /* color: #000080 !important; */
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h1>Sqaurey Dash</h1>
+    <div id="score">Score: 0</div>
+    <canvas id="gameCanvas" width="800" height="200"></canvas>
+    <button onclick="goToMenu()" class="menu-button">Main Menu</button>
+
+    <script>
+        const canvas = document.getElementById("gameCanvas");
+        const ctx = canvas.getContext("2d");
+
+        let dino = { x: 50, y: canvas.height - 70, width: 60, height: 60, dy: 0, gravity: 1, jumpPower: -17, grounded: true };
+        let obstacle = { x: 800, y: canvas.height - 40, width: 40, height: 30, speed: 6 }; // Smaller obstacle
+        let gameOver = false;
+        let score = 0;
+
+        function drawDino() {
+            ctx.fillStyle = "lightslategrey";
+            ctx.fillRect(dino.x, dino.y, dino.width, dino.height);
+        }
+
+        function drawObstacle() {
+            ctx.fillStyle = "black";
+            ctx.fillRect(obstacle.x, obstacle.y, obstacle.width, obstacle.height);
+        }
+
+        function update() {
+            if (!gameOver) {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                drawDino();
+                drawObstacle();
+
+                dino.y += dino.dy;
+                if (dino.y < canvas.height - 70) {
+                    dino.dy += dino.gravity;
+                } else {
+                    dino.dy = 0;
+                    dino.y = canvas.height - 70;
+                    dino.grounded = true;
+                }
+
+                // Move obstacle
+                obstacle.x -= obstacle.speed;
+                if (obstacle.x < -obstacle.width) {
+                    obstacle.x = canvas.width + 100 + Math.random() * 100; // Reduced range for obstacle respawn
+                    score++; 
+                    document.getElementById("score").textContent = "Score: " + score;
+                    if (score % 5 === 0) obstacle.speed += 0.5; // Increase difficulty every 5 points
+                }
+
+                // Collision detection fix (more precise)
+                if (
+                    dino.x + dino.width > obstacle.x && // Right side of dino touches obstacle
+                    dino.x < obstacle.x + obstacle.width && // Left side of dino touches obstacle
+                    dino.y + dino.height > obstacle.y && // Bottom of dino touches obstacle
+                    dino.y < obstacle.y + obstacle.height // Top of dino touches obstacle
+                ) {
+                    gameOver = true;
+                    alert("Game Over! Your Score: " + score);
+                    setTimeout(() => location.reload(), 500);
+                }
+            }
+            requestAnimationFrame(update);
+        }
+
+        document.addEventListener("keydown", function (event) {
+            if (event.code === "Space" && dino.grounded) {
+                dino.dy = dino.jumpPower;
+                dino.grounded = false;
+            }
+        });
+
+        document.addEventListener("click", function () {
+            if (dino.grounded) {
+                dino.dy = dino.jumpPower;
+                dino.grounded = false;
+            }
+        });
+
+        document.addEventListener("touchstart", function () {
+            if (dino.grounded) {
+                dino.dy = dino.jumpPower;
+                dino.grounded = false;
+            }
+        });
+
+        update();
+
+        function goToMenu() {
+    window.location.href = "index.html"; // Change this if your menu page has a different filename
+}
+
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Main Menu</title>
+    <style>
+        body {
+            text-align: center;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to bottom, #1e3c72, #2a5298);
+            color: white;
+        }
+        .menu {
+            margin-top: 50px;
+        }
+        .menu button {
+            font-size: 20px;
+            padding: 10px 20px;
+            margin: 10px;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+            background-color: #ffcc00;
+            color: black;
+        }
+    </style>
+</head>
+<body>
+    <h1>Welcome to Squarey Dash !</h1>
+    <div class="menu">
+        <button onclick="startGame('level1.html')">Level 1</button>
+        <button onclick="startGame('level2.html')">Level 2</button>
+        <button onclick="startGame('level3.html')">Level 3</button>
+    </div>
+    <p class="thank-you">Thank you for playing! Have fun! </p>
+    
+
+    <script>
+        function startGame(levelPage) {
+            window.location.href = levelPage;
+        }
+    </script>
+</body>
+</html>
